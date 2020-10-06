@@ -16,3 +16,6 @@ Route::$needle = "@";
  */
 Route::get('/game/:id', 'GameController@getById');
 Route::get('/game', 'GameController@index');
+Route::post('/game', 'GameController@create');
+Route::put('/game/:id', 'GameController@update');
+Route::delete('/game:id', 'GameController@delete');

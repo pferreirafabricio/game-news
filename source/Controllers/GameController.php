@@ -2,9 +2,10 @@
 
 namespace Source\Controllers;
 
+use Source\Interfaces\iController;
 use Source\Models\Game;
 
-class GameController 
+class GameController implements iController
 {
     /** @var Game */
     private $game;
@@ -47,5 +48,17 @@ class GameController
 
         // $game = $this->game->findById($data['id'], "title, description, video_id");
         // return response($game)->json();
+    }
+
+    public function create()
+    {
+    }
+
+    public function update()
+    {
+    }
+
+    public function delete()
+    {
     }
 }

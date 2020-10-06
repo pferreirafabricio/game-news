@@ -86,10 +86,69 @@ class Route
 
         self::dispatch($routeName);
     }
-
+    
+    /**
+     * post
+     *
+     * @param  string $routeName
+     * @param  string|\Closure $handler
+     * @return void
+     */
     public static function post(string $routeName, $handler)
     {
         self::$currentHttpMethod = 'POST';
+        self::validateHttpMethod();
+
+        $params = self::getParams($routeName);
+
+        self::$route = [
+            $routeName => [
+                "routeName" => $routeName,
+                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
+                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
+                "params" => (!empty($params) ? $params : null)
+            ]
+        ];
+        
+        self::dispatch($routeName);
+    }
+    
+    /**
+     * put
+     *
+     * @param  string $routeName
+     * @param  string|\Closure $handler
+     * @return void
+     */
+    public static function put(string $routeName, $handler)
+    {
+        self::$currentHttpMethod = 'PUT';
+        self::validateHttpMethod();
+
+        $params = self::getParams($routeName);
+
+        self::$route = [
+            $routeName => [
+                "routeName" => $routeName,
+                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
+                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
+                "params" => (!empty($params) ? $params : null)
+            ]
+        ];
+        
+        self::dispatch($routeName);
+    }
+    
+    /**
+     * delete
+     *
+     * @param  string $routeName
+     * @param  string|\Closure $handler
+     * @return void
+     */
+    public static function delete(string $routeName, $handler)
+    {
+        self::$currentHttpMethod = 'DELETE';
         self::validateHttpMethod();
 
         $params = self::getParams($routeName);
