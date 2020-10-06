@@ -11,10 +11,13 @@ class Route
     public static $needle = ':';
 
     /** @var string */
-    private static $requestHttpMethod;
-
-    /** @var string */
     private static $currentHttpMethod;
+
+    /** @const int Bad Request */
+    private const BAD_REQUEST = 400;
+
+    /** @const int Method not allowed */
+    private const METHOD_NOT_ALLOWED = 405;
 
     /**
      * Returns the current request URI
@@ -29,14 +32,22 @@ class Route
     /**
      * getParams
      *
-     * @return array
+     * @return array|null
      */
-    private static function getParams(string $routeName): array
+    private static function getParams(string $routeName): ?array
     {
         $routeParams = array_filter(explode('/', $routeName));
         $urlParams = array_filter(explode('/', self::getCurrentUri()));
         ksort($routeParams);
         ksort($urlParams);
+
+        if (sizeof($routeParams) !== sizeof($urlParams)) {
+            echo response([
+                'message' => 'The number of arguments is invalid',
+                'code' => self::BAD_REQUEST,
+            ])->json();
+            exit;
+        }
 
         $data = [];
         foreach($routeParams as $param) {
@@ -65,8 +76,6 @@ class Route
         $url = self::getCurrentUri();
         $params = self::getParams($routeName);
 
-        var_dump($params);
-
         self::$route = [
             $routeName => [
                 "routeName" => $routeName,
@@ -76,7 +85,7 @@ class Route
             ]
         ];
 
-        self::dispatch($url);
+        self::dispatch($routeName);
     }
 
     public static function post(string $routeName, $handler)
@@ -95,8 +104,8 @@ class Route
                 "params" => (!empty($params) ? $params : null)
             ]
         ];
-
-        self::dispatch($url);
+        
+        self::dispatch($routeName);
     }
 
     /**
@@ -108,7 +117,7 @@ class Route
     private static function dispatch(string $route): void
     {
         $route = (self::$route[$route] ?? []);
-
+        
         if (!empty($route)) {
             if ($route["controller"] instanceof \Closure) {
                 call_user_func($route["controller"]);
@@ -126,7 +135,12 @@ class Route
             }
         }
     }
-
+    
+    /**
+     * namespace
+     *
+     * @return string
+     */
     private static function namespace(): string
     {
         return "Source\Controllers\\";
@@ -135,12 +149,16 @@ class Route
     /**
      * validateHttpMethod
      *
-     * @return bool
+     * @return void
      */
-    private static function validateHttpMethod(): bool
+    private static function validateHttpMethod(): void
     {
-        if (self::$currentHttpMethod !== self::$requestHttpMethod) {
-            return false;
+        if (self::$currentHttpMethod !== $_SERVER['REQUEST_METHOD']) {
+            echo response([
+                'message' => 'This method is not supported by this route',
+                'code' => self::METHOD_NOT_ALLOWED,
+            ])->json();
+            exit;
         }
     } 
 }
