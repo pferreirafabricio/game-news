@@ -19,7 +19,9 @@
         "psr-4": {
             "Source\\": "source/"
         },
-        "files": []
+        "files": [
+            "Source/Boot/Config.php"
+        ]
     },
     "require": {}
 }
