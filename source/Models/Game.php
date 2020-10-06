@@ -42,7 +42,7 @@ class Game extends Model
      */
     public function find(string $terms, string $params, string $columns = "*"): ?Game
     {
-        $find = $this->read("SELECT {$columns } FROM " . self::$entity . " WHERE {$terms}", $params);
+        $find = $this->read("SELECT {$columns} FROM " . self::$entity . " WHERE {$terms}", $params);
         if ($this->fail() || !$find->rowCount()) {
             return null;
         }

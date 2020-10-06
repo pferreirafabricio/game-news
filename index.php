@@ -14,4 +14,5 @@ Route::$needle = "@";
 /**
  * ROUTES
  */
-Route::get('/get/game/:id', 'GameController@index');
+Route::get('/game/:id', 'GameController@getById');
+Route::get('/game', 'GameController@index');

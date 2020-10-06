@@ -8,11 +8,16 @@ class GameController
 {
     /** @var Game */
     private $game;
-
-    // public function __construct(string $title, string $description, string $videoId)
-    // {
-    //     $this->game = (new Game())->bootstrap($title, $description, $videoId); 
-    // }
+    
+    /**
+     * __construct
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->game = new Game(); 
+    }
     
     /**
      * index
@@ -22,5 +27,25 @@ class GameController
     public function index()
     {
         return response(["route" => "index"])->json();
+    }
+    
+    /**
+     * getById
+     *
+     * @param  mixed $data
+     * @return string
+     */
+    public function getById(array $data): string
+    {
+        if (empty($data['id'] || ($data['id'] instanceof string))) {
+            return response([
+                'message' => 'Oopss! The Id of the game is missing'
+            ])->json();
+        }
+        
+        return "The game id is: {$data['id']}";
+
+        // $game = $this->game->findById($data['id'], "title, description, video_id");
+        // return response($game)->json();
     }
 }

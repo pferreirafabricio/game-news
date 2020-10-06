@@ -29,7 +29,7 @@ class Model
      * @param  array $required Required fields
      * @return void
      */
-    public function __construct(string $entity, array $protected, array $required): void
+    public function __construct(string $entity, array $protected, array $required)
     {
         $this->entity = $entity;
         $this->protected = $protected;

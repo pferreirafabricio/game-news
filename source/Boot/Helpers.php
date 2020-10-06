@@ -2,7 +2,13 @@
 
 use Source\Support\Response;
 
-function response(array $data): Response
+/**
+ * Create a JSON response od the given value
+ *
+ * @param  mixed $data
+ * @return Response
+ */
+function response($data): Response
 {
     return (new Response($data));
 }

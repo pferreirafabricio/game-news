@@ -73,7 +73,6 @@ class Route
         self::$currentHttpMethod = 'GET';
         self::validateHttpMethod();
         
-        $url = self::getCurrentUri();
         $params = self::getParams($routeName);
 
         self::$route = [
@@ -81,7 +80,7 @@ class Route
                 "routeName" => $routeName,
                 "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
                 "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
-                "params" => (!empty($params) ? $params : null)
+                "params" => (!empty($params) ? $params : [])
             ]
         ];
 
@@ -93,7 +92,6 @@ class Route
         self::$currentHttpMethod = 'POST';
         self::validateHttpMethod();
 
-        $url = self::getCurrentUri();
         $params = self::getParams($routeName);
 
         self::$route = [
@@ -120,7 +118,7 @@ class Route
         
         if (!empty($route)) {
             if ($route["controller"] instanceof \Closure) {
-                call_user_func($route["controller"]);
+                call_user_func($route["controller"], $route["params"]);
                 return;
             }
 
@@ -130,7 +128,8 @@ class Route
             if (class_exists($controller)) {
                 if (method_exists($controller, $method)) {
                     $newController = new $controller;
-                    echo $newController->$method();
+                    echo $newController->$method($route["params"]);
+                    exit;
                 }
             }
         }
