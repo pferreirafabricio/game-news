@@ -51,6 +51,16 @@ class Game extends Model
     }
     
     /**
+     * Get all records
+     *
+     * @return Game
+     */
+    public function getAll(): ?Game
+    {
+        return $this->find("id >= :id", "id=1");
+    }
+    
+    /**
      * Find a game by Id
      *
      * @param  int $id
