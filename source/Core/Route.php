@@ -75,16 +75,7 @@ class Route
         
         $params = self::getParams($routeName);
 
-        self::$route = [
-            $routeName => [
-                "routeName" => $routeName,
-                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
-                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
-                "params" => (!empty($params) ? $params : [])
-            ]
-        ];
-
-        self::dispatch($routeName);
+        self::mountRoute($routeName, $handler, $params);
     }
     
     /**
@@ -101,16 +92,7 @@ class Route
 
         $params = self::getParams($routeName);
 
-        self::$route = [
-            $routeName => [
-                "routeName" => $routeName,
-                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
-                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
-                "params" => (!empty($params) ? $params : null)
-            ]
-        ];
-        
-        self::dispatch($routeName);
+        self::mountRoute($routeName, $handler, $params);
     }
     
     /**
@@ -127,16 +109,7 @@ class Route
 
         $params = self::getParams($routeName);
 
-        self::$route = [
-            $routeName => [
-                "routeName" => $routeName,
-                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
-                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
-                "params" => (!empty($params) ? $params : null)
-            ]
-        ];
-        
-        self::dispatch($routeName);
+        self::mountRoute($routeName, $handler, $params);
     }
     
     /**
@@ -153,6 +126,19 @@ class Route
 
         $params = self::getParams($routeName);
 
+        self::mountRoute($routeName, $handler, $params);
+    }
+    
+    /**
+     * mountRoute
+     *
+     * @param  string $routeName
+     * @param  string|\Closure $handler
+     * @param  mixed $params
+     * @return void
+     */
+    private static function mountRoute(string $routeName, $handler, array $params): void
+    {
         self::$route = [
             $routeName => [
                 "routeName" => $routeName,
