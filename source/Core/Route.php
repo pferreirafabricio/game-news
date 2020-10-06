@@ -8,7 +8,13 @@ class Route
     private static $route;
 
     /** @var string */
-    public static $needle;
+    public static $needle = ':';
+
+    /** @var string */
+    private static $requestHttpMethod;
+
+    /** @var string */
+    private static $currentHttpMethod;
 
     /**
      * Returns the current request URI
@@ -17,7 +23,7 @@ class Route
      */
     private static function getCurrentUri(): string
     {
-        return filter_input(INPUT_GET, "route", FILTER_SANITIZE_SPECIAL_CHARS);
+        return filter_input(INPUT_GET, "route", FILTER_SANITIZE_SPECIAL_CHARS) ?? "/";
     }
 
     /**
@@ -25,9 +31,23 @@ class Route
      *
      * @return array
      */
-    private static function getParams(): array
+    private static function getParams(string $routeName): array
     {
-        return explode(':', self::getCurrentUri());
+        $routeParams = array_filter(explode('/', $routeName));
+        $urlParams = array_filter(explode('/', self::getCurrentUri()));
+        ksort($routeParams);
+        ksort($urlParams);
+
+        $data = [];
+        foreach($routeParams as $param) {
+            if (strpos($param, ':') !== false) {
+                $arrayKey = array_search($param, $routeParams);
+                $variableName = str_replace(':', '', strstr($param, ':', false));
+                $data[$variableName] = $urlParams[$arrayKey];
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -39,8 +59,33 @@ class Route
      */
     public static function get(string $routeName, $handler)
     {
+        self::$currentHttpMethod = 'GET';
+        self::validateHttpMethod();
+        
         $url = self::getCurrentUri();
-        //$params = self::getParams();
+        $params = self::getParams($routeName);
+
+        var_dump($params);
+
+        self::$route = [
+            $routeName => [
+                "routeName" => $routeName,
+                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
+                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
+                "params" => (!empty($params) ? $params : null)
+            ]
+        ];
+
+        self::dispatch($url);
+    }
+
+    public static function post(string $routeName, $handler)
+    {
+        self::$currentHttpMethod = 'POST';
+        self::validateHttpMethod();
+
+        $url = self::getCurrentUri();
+        $params = self::getParams($routeName);
 
         self::$route = [
             $routeName => [
@@ -76,7 +121,7 @@ class Route
             if (class_exists($controller)) {
                 if (method_exists($controller, $method)) {
                     $newController = new $controller;
-                    $newController->$method();
+                    echo $newController->$method();
                 }
             }
         }
@@ -86,4 +131,16 @@ class Route
     {
         return "Source\Controllers\\";
     }
+    
+    /**
+     * validateHttpMethod
+     *
+     * @return bool
+     */
+    private static function validateHttpMethod(): bool
+    {
+        if (self::$currentHttpMethod !== self::$requestHttpMethod) {
+            return false;
+        }
+    } 
 }

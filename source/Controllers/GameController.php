@@ -21,6 +21,6 @@ class GameController
      */
     public function index()
     {
-        echo json_encode(["route" => "index"]);
+        return json_encode(["route" => "index"]);
     }
 }

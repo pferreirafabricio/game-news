@@ -3,7 +3,7 @@
 use Source\Core\Route;
 
 require_once './vendor/autoload.php';
-require_once './source/Core/Headers.php';
+// require_once './source/Core/Headers.php';
 
 
 /**
@@ -14,4 +14,4 @@ Route::$needle = "@";
 /**
  * ROUTES
  */
-Route::get('/get', 'GameController@index');
+Route::get('/get/game/:id', 'GameController@index');
