@@ -188,10 +188,10 @@ class Model
         }
     }
 
-    public function delete(string $entity, string $terms, string $params): ?int
+    public function delete(string $terms, string $params): ?int
     {
         try {
-            $stmt = Connect::getInstance()->prepare("DELETE FROM {$entity} WHERE {$terms}");
+            $stmt = Connect::getInstance()->prepare("DELETE FROM " . self::$entity . " WHERE {$terms}");
             parse_str($params, $params);
             $stmt->execute($params);
 

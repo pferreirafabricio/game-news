@@ -100,4 +100,15 @@ class Game extends Model
     {
         return $this->update($data, "id = :id", "id={$id}");
     }
+    
+    /**
+     * remove
+     *
+     * @param  int $id
+     * @return int
+     */
+    public function remove(int $id): ?int
+    {
+        return $this->delete("id = :id", "id={$id}");
+    }
 }

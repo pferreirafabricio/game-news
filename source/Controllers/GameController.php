@@ -40,7 +40,7 @@ class GameController implements iController
     /**
      * getById
      *
-     * @param  mixed $data
+     * @param  array $data
      * @return string
      */
     public function getById(array $data): string
@@ -159,16 +159,32 @@ class GameController implements iController
             'message' => 'Success! Game updated',
         ])->json();
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  array $data
+     * @return void
+     */
     public function delete(array $data)
     {
-        if (!$this->validateGameId($data['id'])) {
+        $id = (int) $data['id'] ?? 0;
+
+        if (!$this->validateGameId($id)) {
             return response([
                 'message' => 'Oopss! The Id of the game is missing'
-            ])->json();
+            ], 400)->json();
         }
 
-        return "Delete game id: {$data['id']}";
+        if (!$this->game->remove($id)) {
+            return response([
+                'message' => 'Oopss! Something was wrong on update the game',
+            ], 500)->json();
+        }
+
+        return response([
+            'message' => 'Success! Game deleted',
+        ], 200)->json();
     }
     
     /**
@@ -189,7 +205,7 @@ class GameController implements iController
     /**
      * validateGameId
      *
-     * @param  mixed $id
+     * @param  int $id
      * @return bool
      */
     private function validateGameId(int $id): bool
