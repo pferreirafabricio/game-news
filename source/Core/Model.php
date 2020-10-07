@@ -90,7 +90,7 @@ class Model
      * @param  array $data
      * @return int
      */
-    public function create(string $entity, array $data): ?int
+    public function create(array $data): ?int
     {
         try {
             /**
@@ -109,7 +109,7 @@ class Model
              * Prepare the PDO statement using the final query
              * Ex.: INSERT INTO users (id, name) VALUES (:id, :name)
              */
-            $stmt = Connect::getInstance()->prepare("INSERT INTO {$entity} ({$columns}) VALUES ({$values})");
+            $stmt = Connect::getInstance()->prepare("INSERT INTO " . self::$entity . " ({$columns}) VALUES ({$values})");
 
             /**
              * Add the values that will be replaced in the text with ':' character

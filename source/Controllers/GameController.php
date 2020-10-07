@@ -66,19 +66,25 @@ class GameController implements iController
     /**
      * create
      *
-     * @param  array $data
      * @return string
      */
-    public function create(array $data): string
+    public function create(): string
     {
-        parse_str(file_get_contents('php://input'), $data);
-        $gameObject = (object) $data;
+        parse_str(file_get_contents('php://input'), $requestData);
 
-        $this->game->title = $gameObject->title ?? null;
-        $this->game->description = $gameObject->description ?? null;
-        $this->game->video_id = $gameObject->video_id ?? null;
+        if (!$this->validateData($requestData)) {
+            return response([
+                'message' => 'Oopss! The data to create is missing'
+            ], 400)->json();
+        }
 
-        if (!$this->game->required($data)) {
+        $this->game->bootstrap(
+            $requestData['title'],
+            $requestData['description'],
+            $requestData['video_id'],
+        );
+
+        if (!$this->game->required($requestData)) {
             return response([
                 'message' => 'Verify the data and try again',
                 'errcode' => 400
@@ -93,13 +99,15 @@ class GameController implements iController
             ], 400)->json();
         }
 
-        if(is_null($this->game->create("games", $data) )) {
+        $insertedId =  $this->game->create($requestData);
+        if(is_null($insertedId)) {
             return response([
                 'message' => $this->game->fail()
             ])->json();
         };
 
         return response([
+            'gameId' => $insertedId,
             'message' => 'Success! Game created successfully'
         ])->json();
     }
