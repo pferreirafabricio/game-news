@@ -161,23 +161,24 @@ class Model
     /**
      * Update a record
      *
-     * @param  string $entity
      * @param  array $data
      * @param  string $terms
      * @param  string $params
      * @return int|null
      */
-    public function update(string $entity, array $data, string $terms, string $params): ?int
+    public function update(array $data, string $terms, string $params): ?int
     {
         try {
             $dataSet = [];
-            foreach ($data as $bind => $value) {
+
+            foreach ($this->safe($data) as $bind => $value) {
                 $dataSet[] = "{$bind} = :$bind";
             }
+
             $dataSet = implode(", ", $dataSet);
             parse_str($params, $params);
 
-            $stmt = Connect::getInstance()->prepare("UPDATE {$entity} SET ${$dataSet} WHERE {$terms}");
+            $stmt = Connect::getInstance()->prepare("UPDATE " . self::$entity . " SET {$dataSet} WHERE {$terms}");
             $stmt->execute($this->filter(array_merge($data, $params)));
 
             return ($stmt->rowCount() ?? 1);

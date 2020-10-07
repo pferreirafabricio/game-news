@@ -28,7 +28,7 @@ class Game extends Model
     {
         $this->title = $title;
         $this->description = $description;
-        $this->videoId = $videoId;
+        $this->video_id = $videoId;
         return $this;
     }
     
@@ -87,5 +87,17 @@ class Game extends Model
     public function findByTitle(string $title, string $columns = "*")
     {
         return $this->find("title = :title", "title={$title}", $columns);
+    }
+    
+    /**
+     * updateById
+     *
+     * @param  array $data
+     * @param  int $id
+     * @return int
+     */
+    public function updateById(array $data, int $id): ?int
+    {
+        return $this->update($data, "id = :id", "id={$id}");
     }
 }

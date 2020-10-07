@@ -112,13 +112,52 @@ class GameController implements iController
      */
     public function update(array $data)
     {
-        if (!$this->validateGameId($data['id'])) {
+        parse_str(file_get_contents('php://input'), $requestData);
+
+        if (!$this->validateData($requestData)) {
             return response([
-                'message' => 'Oopss! The Id of the game is missing'
-            ])->json();
+                'message' => 'Oopss! The data to update is missing'
+            ], 400)->json();
         }
 
-        return "Update game id: {$data['id']}";
+        $id = (int) $data['id'] ?? 0;
+
+        if (!$this->validateGameId($id)) {
+            return response([
+                'message' => 'Oopss! The Id of the game is missing'
+            ], 400)->json();
+        }
+
+        $this->game->bootstrap(
+            $requestData['title'],
+            $requestData['description'],
+            $requestData['video_id'],
+        );
+
+        if (!$this->game->required($requestData)) {
+            return response([
+                'message' => 'Verify the data and try again',
+                'errcode' => 400
+            ], 400)->json();
+        }
+
+        $errors = $this->validate(true, $id);
+        if ($errors) {
+            return response([
+                'message' => $errors,
+                'errcode' => 400
+            ], 400)->json();
+        }
+
+        if (!$this->game->updateById($requestData, $id)) {
+            return response([
+                'message' => 'Oopss! Something was wrong on update the game',
+            ], 500)->json();
+        }
+
+        return response([
+            'message' => 'Success! Game updated',
+        ])->json();
     }
 
     public function delete(array $data)
@@ -130,6 +169,21 @@ class GameController implements iController
         }
 
         return "Delete game id: {$data['id']}";
+    }
+    
+    /**
+     * validateData
+     *
+     * @param  array $data
+     * @return bool
+     */
+    private function validateData(array $data): bool 
+    {
+        if (empty($data)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -153,12 +207,12 @@ class GameController implements iController
      * @param  bool $validateId
      * @return array
      */
-    private function validate(bool $validateId = false): array
+    private function validate(bool $validateId = false, int $id = 0): array
     {
         $errors = [];
         $game = $this->game->data();
 
-        if ($validateId && $game->id <= 0) {
+        if ($validateId && $id <= 0) {
             $errors[] = 'The id of the game is invalid';
         }
 
