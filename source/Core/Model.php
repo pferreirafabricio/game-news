@@ -31,9 +31,9 @@ class Model
      */
     public function __construct(string $entity, array $protected, array $required)
     {
-        $this->entity = $entity;
-        $this->protected = $protected;
-        $this->required = $required;
+        self::$entity = $entity;
+        self::$protected = $protected;
+        self::$required = $required;
     }
 
     /**
@@ -115,7 +115,7 @@ class Model
              * Add the values that will be replaced in the text with ':' character
              * Ex.: INSERT ... VALUES (2, 'Master')
              */
-            $stmt->execute($this->filter($data));
+            $stmt->execute($this->safe($this->filter($data)));
 
             /**
              * Return the last insert id into the database
@@ -215,7 +215,13 @@ class Model
 
         return $safe;
     }
-
+    
+    /**
+     * filter
+     *
+     * @param  array $data
+     * @return array
+     */
     public function filter(array $data): ?array
     {
         $filter = [];

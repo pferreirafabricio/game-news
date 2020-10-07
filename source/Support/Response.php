@@ -9,14 +9,18 @@ class Response implements iResponsable
     /** @var array */
     private $data; 
 
+    /** @var int */
+    private $httpResponseCode;
+
     /**
      * __construct
      *
      * @param mixed $data
      */
-    public function __construct($data)
+    public function __construct($data, int $httpResponseCode = 200)
     {
         $this->data = $data;
+        $this->httpResponseCode = $httpResponseCode;
         return $this;
     }
     
@@ -26,7 +30,8 @@ class Response implements iResponsable
      * @return string
      */
     public function json(): string
-    {
+    {   
+        http_response_code($this->httpResponseCode);
         return (json_encode($this->data) ?? '');
     }
 }
