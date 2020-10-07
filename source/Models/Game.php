@@ -53,11 +53,16 @@ class Game extends Model
     /**
      * Get all records
      *
-     * @return Game
+     * @return array|null
      */
-    public function getAll(): ?Game
+    public function getAll(): ?array
     {
-        return $this->find("id != 0", "");
+        $get = $this->read("SELECT * FROM games");
+        if ($this->fail() || !$get->rowCount()) {
+            return null;
+        }
+
+        return $get->fetchAll();
     }
     
     /**

@@ -32,6 +32,6 @@ class Response implements iResponsable
     public function json(): string
     {   
         http_response_code($this->httpResponseCode);
-        return (json_encode($this->data) ?? '');
+        return json_encode(["data" => ($this->data ?? '')]);
     }
 }

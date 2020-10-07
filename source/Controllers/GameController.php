@@ -23,16 +23,18 @@ class GameController implements iController
     /**
      * index
      *
-     * @return Game
+     * @return string
      */
-    public function index(array $data)
+    public function index(array $data): string
     {
-        if (!$this->game->getAll()) {
+        $games = $this->game->getAll();
+        if (is_null($games)) {
             return response([
                 'message' => $this->game->fail(),
-            ])->json();
+            ], 500)->json();
         }
-        return response($this->game->getAll())->json();
+
+        return response($games)->json();
     }
 
     /**
@@ -77,7 +79,7 @@ class GameController implements iController
             ], 400)->json();
         }
 
-        $errors = $this->validate($data);
+        $errors = $this->validate();
         if ($errors) {
             return response([
                 'message' => $errors,
@@ -85,11 +87,11 @@ class GameController implements iController
             ], 400)->json();
         }
 
-        /* if(is_null($this->game->create("games", $data) )) {
+        if(is_null($this->game->create("games", $data) )) {
             return response([
                 'message' => $this->game->fail()
             ])->json();
-        }; */
+        };
 
         return response([
             'message' => 'Success! Game created successfully'
@@ -142,11 +144,10 @@ class GameController implements iController
     /**
      * validate
      *
-     * @param  array $data
      * @param  bool $validateId
      * @return array
      */
-    private function validate(array $data, bool $validateId = false): array
+    private function validate(bool $validateId = false): array
     {
         $errors = [];
         $game = $this->game->data();
