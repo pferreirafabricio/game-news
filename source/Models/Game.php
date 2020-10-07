@@ -13,7 +13,7 @@ class Game extends Model
      */
     public function __construct()
     {   
-        parent::__construct("game", ["id"], ["title", "description", "videoId"]);
+        parent::__construct("games", ["id"], ["title", "description", "video_id"]);
     }
     
     /**
@@ -42,7 +42,7 @@ class Game extends Model
      */
     public function find(string $terms, string $params, string $columns = "*"): ?Game
     {
-        $find = $this->read("SELECT {$columns} FROM " . self::$entity . " WHERE {$terms}", $params);
+        $find = $this->read("SELECT {$columns} FROM games WHERE {$terms}", $params);
         if ($this->fail() || !$find->rowCount()) {
             return null;
         }
@@ -57,7 +57,7 @@ class Game extends Model
      */
     public function getAll(): ?Game
     {
-        return $this->find("id >= :id", "id=1");
+        return $this->find("id != 0", "");
     }
     
     /**

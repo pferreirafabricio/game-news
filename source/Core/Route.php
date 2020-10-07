@@ -5,13 +5,13 @@ namespace Source\Core;
 class Route
 {
     /** @var array */
-    private static $route;
+    private $route;
 
     /** @var string */
-    public static $needle = ':';
+    private $needle;
 
     /** @var string */
-    private static $currentHttpMethod;
+    private $currentHttpMethod;
 
     /** @const int Bad Request */
     private const BAD_REQUEST = 400;
@@ -20,11 +20,22 @@ class Route
     private const METHOD_NOT_ALLOWED = 405;
 
     /**
+     * __construct
+     *
+     * @param  string $needle
+     * @return void
+     */
+    public function __construct(?string $needle = "@")
+    {
+        $this->needle = $needle;
+    }
+
+    /**
      * Returns the current request URI
      *
      * @return string
      */
-    private static function getCurrentUri(): string
+    private function getCurrentUri(): string
     {
         return filter_input(INPUT_GET, "route", FILTER_SANITIZE_SPECIAL_CHARS) ?? "/";
     }
@@ -34,10 +45,10 @@ class Route
      *
      * @return array|null
      */
-    private static function getParams(string $routeName): ?array
+    private function getParams(string $routeName): ?array
     {
         $routeParams = array_filter(explode('/', $routeName));
-        $urlParams = array_filter(explode('/', self::getCurrentUri()));
+        $urlParams = array_filter(explode('/', $this->getCurrentUri()));
         ksort($routeParams);
         ksort($urlParams);
 
@@ -50,7 +61,7 @@ class Route
         }
 
         $data = [];
-        foreach($routeParams as $param) {
+        foreach ($routeParams as $param) {
             if (strpos($param, ':') !== false) {
                 $arrayKey = array_search($param, $routeParams);
                 $variableName = str_replace(':', '', strstr($param, ':', false));
@@ -68,16 +79,14 @@ class Route
      * @param  string|\Closure $handler
      * @return void
      */
-    public static function get(string $routeName, $handler)
+    public function get(string $routeName, $handler)
     {
-        self::$currentHttpMethod = 'GET';
-        self::validateHttpMethod();
-        
-        $params = self::getParams($routeName);
+        $this->currentHttpMethod = 'GET';
+        $this->validateHttpMethod();
 
-        self::mountRoute($routeName, $handler, $params);
+        $this->addRoute($routeName, $handler);
     }
-    
+
     /**
      * post
      *
@@ -85,16 +94,14 @@ class Route
      * @param  string|\Closure $handler
      * @return void
      */
-    public static function post(string $routeName, $handler)
+    public function post(string $routeName, $handler)
     {
-        self::$currentHttpMethod = 'POST';
-        self::validateHttpMethod();
+        $this->currentHttpMethod = 'POST';
+        $this->validateHttpMethod();
 
-        $params = self::getParams($routeName);
-
-        self::mountRoute($routeName, $handler, $params);
+        $this->addRoute($routeName, $handler);
     }
-    
+
     /**
      * put
      *
@@ -102,16 +109,14 @@ class Route
      * @param  string|\Closure $handler
      * @return void
      */
-    public static function put(string $routeName, $handler)
+    public function put(string $routeName, $handler)
     {
-        self::$currentHttpMethod = 'PUT';
-        self::validateHttpMethod();
+        $this->currentHttpMethod = 'PUT';
+        $this->validateHttpMethod();
 
-        $params = self::getParams($routeName);
-
-        self::mountRoute($routeName, $handler, $params);
+        $this->addRoute($routeName, $handler);
     }
-    
+
     /**
      * delete
      *
@@ -119,36 +124,37 @@ class Route
      * @param  string|\Closure $handler
      * @return void
      */
-    public static function delete(string $routeName, $handler)
+    public function delete(string $routeName, $handler)
     {
-        self::$currentHttpMethod = 'DELETE';
-        self::validateHttpMethod();
+        $this->currentHttpMethod = 'DELETE';
+        $this->validateHttpMethod();
 
-        $params = self::getParams($routeName);
-
-        self::mountRoute($routeName, $handler, $params);
+        $this->addRoute($routeName, $handler);
     }
-    
+
     /**
-     * mountRoute
+     * addRoute
      *
      * @param  string $routeName
      * @param  string|\Closure $handler
      * @param  mixed $params
      * @return void
      */
-    private static function mountRoute(string $routeName, $handler, array $params): void
+    private function addRoute(string $routeName, $handler): void
     {
-        self::$route = [
+        $url = $this->getCurrentUri();
+        $params = $this->getParams($routeName);
+
+        $this->route = [
             $routeName => [
                 "routeName" => $routeName,
-                "controller" => (!is_string($handler) ? $handler : strstr($handler, static::$needle, true)),
-                "method" => (!is_string($handler) ? null : str_replace(static::$needle, '', strstr($handler, static::$needle, false))),
-                "params" => (!empty($params) ? $params : null)
+                "controller" => (!is_string($handler) ? $handler : strstr($handler, $this->needle, true)),
+                "method" => (!is_string($handler) ? null : str_replace($this->needle, '', strstr($handler, $this->needle, false))),
+                "params" => (!empty($params) ? $params : [])
             ]
         ];
-        
-        self::dispatch($routeName);
+
+        $this->dispatch($routeName);
     }
 
     /**
@@ -157,9 +163,9 @@ class Route
      * @param  string $route
      * @return void
      */
-    private static function dispatch(string $route): void
+    private function dispatch(string $route): void
     {
-        $route = (self::$route[$route] ?? []);
+        $route = ($this->route[$route] ?? []);
         
         if (!empty($route)) {
             if ($route["controller"] instanceof \Closure) {
@@ -179,7 +185,7 @@ class Route
             }
         }
     }
-    
+
     /**
      * namespace
      *
@@ -189,20 +195,20 @@ class Route
     {
         return "Source\Controllers\\";
     }
-    
+
     /**
      * validateHttpMethod
      *
      * @return void
      */
-    private static function validateHttpMethod(): void
+    private function validateHttpMethod(): void
     {
-        if (self::$currentHttpMethod !== $_SERVER['REQUEST_METHOD']) {
+        if ($this->currentHttpMethod !== $_SERVER['REQUEST_METHOD']) {
             echo response([
                 'message' => 'This method is not supported by this route',
                 'code' => self::METHOD_NOT_ALLOWED,
             ])->json();
             exit;
         }
-    } 
+    }
 }

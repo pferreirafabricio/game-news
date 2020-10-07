@@ -17,7 +17,7 @@ class GameController implements iController
      */
     public function __construct()
     {
-        $this->game = new Game(); 
+        $this->game = new Game();
     }
     
     /**
@@ -25,9 +25,14 @@ class GameController implements iController
      *
      * @return Game
      */
-    public function index()
+    public function index(array $data)
     {
-        return response(["route" => "index"])->json();
+        if (!$this->game->getAll()) {
+            return response([
+                'message' => $this->game->fail(),
+            ])->json();
+        }
+        return response($this->game->getAll())->json();
     }
     
     /**
@@ -38,7 +43,7 @@ class GameController implements iController
      */
     public function getById(array $data): string
     {
-        if (empty($data['id'] || ($data['id'] instanceof string))) {
+        if (!$this->validateGameId($data['id'])) {
             return response([
                 'message' => 'Oopss! The Id of the game is missing'
             ])->json();
@@ -50,15 +55,55 @@ class GameController implements iController
         // return response($game)->json();
     }
 
-    public function create()
+    public function create(array $data)
     {
+        parse_str(file_get_contents('php://input'), $data);
+       
+        if(!$this->game->create("games", $data)) {
+            return response([
+                'message' => $this->game->fail()
+            ])->json();
+        };
+
+        return response([
+            'message' => 'Success! Game created successfully'
+        ])->json();
     }
 
-    public function update()
+    public function update(array $data)
     {
+        if (!$this->validateGameId($data['id'])) {
+            return response([
+                'message' => 'Oopss! The Id of the game is missing'
+            ])->json();
+        }
+        
+        return "Update game id: {$data['id']}";
     }
 
-    public function delete()
+    public function delete(array $data)
     {
+        if (!$this->validateGameId($data['id'])) {
+            return response([
+                'message' => 'Oopss! The Id of the game is missing'
+            ])->json();
+        }
+
+        return "Delete game id: {$data['id']}";
+    }
+    
+    /**
+     * validateGameId
+     *
+     * @param  mixed $id
+     * @return bool
+     */
+    private function validateGameId($id): bool
+    {
+        if (empty($id)) {
+            return false;
+        }
+
+        return true;
     }
 }

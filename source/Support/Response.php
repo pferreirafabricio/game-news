@@ -12,9 +12,9 @@ class Response implements iResponsable
     /**
      * __construct
      *
-     * @param array $data
+     * @param mixed $data
      */
-    public function __construct(array $data)
+    public function __construct($data)
     {
         $this->data = $data;
         return $this;
