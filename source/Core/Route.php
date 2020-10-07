@@ -29,6 +29,16 @@ class Route
     {
         $this->needle = $needle;
     }
+    
+    /**
+     * __debug
+     *
+     * @return array
+     */
+    public function __debug(): ?array
+    {
+        return $this->route;
+    }
 
     /**
      * Returns the current request URI
@@ -144,9 +154,9 @@ class Route
     {
         $url = $this->getCurrentUri();
         $params = $this->getParams($routeName);
-
+        
         $this->route = [
-            $routeName => [
+            $this->currentHttpMethod . $url => [
                 "routeName" => $routeName,
                 "controller" => (!is_string($handler) ? $handler : strstr($handler, $this->needle, true)),
                 "method" => (!is_string($handler) ? null : str_replace($this->needle, '', strstr($handler, $this->needle, false))),
@@ -154,7 +164,9 @@ class Route
             ]
         ];
 
-        $this->dispatch($routeName);
+        var_dump($this->route);
+
+        $this->dispatch($this->currentHttpMethod . $url);
     }
 
     /**
