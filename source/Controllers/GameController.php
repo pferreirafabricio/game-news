@@ -45,16 +45,22 @@ class GameController implements iController
      */
     public function getById(array $data): string
     {
-        if (!$this->validateGameId($data['id'])) {
+        $id = (int) $data['id'];
+        
+        if (!$this->validateGameId($id)) {
             return response([
                 'message' => 'Oopss! The Id of the game is missing'
-            ])->json();
+            ], 400)->json();
         }
 
-        return "The game id is: {$data['id']}";
+        $game = $this->game->findById($id);
+        if (is_null($game) || is_null($game->data())) {
+            return response([
+                'message' => "No game found with id {$id}"
+            ], 404)->json();
+        }
 
-        // $game = $this->game->findById($data['id'], "title, description, video_id");
-        // return response($game)->json();
+        return response($game->data())->json();
     }
 
     /**
@@ -132,9 +138,9 @@ class GameController implements iController
      * @param  mixed $id
      * @return bool
      */
-    private function validateGameId($id): bool
+    private function validateGameId(int $id): bool
     {
-        if (empty($id)) {
+        if (is_null($id) || $id <= 0) {
             return false;
         }
 
