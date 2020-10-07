@@ -207,7 +207,7 @@ class Route
             echo response([
                 'message' => 'This method is not supported by this route',
                 'code' => self::METHOD_NOT_ALLOWED,
-            ])->json();
+            ], 405)->json();
             exit;
         }
     }
