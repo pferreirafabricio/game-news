@@ -164,8 +164,6 @@ class Route
             ]
         ];
 
-        var_dump($this->route);
-
         $this->dispatch($this->currentHttpMethod . $url);
     }
 
