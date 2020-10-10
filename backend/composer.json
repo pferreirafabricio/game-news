@@ -24,5 +24,7 @@
             "Source/Boot/Helpers.php"
         ]
     },
-    "require": {}
+    "require": {
+        "coffeecode/router": "1.0.*"
+    }
 }
