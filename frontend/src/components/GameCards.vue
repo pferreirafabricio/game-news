@@ -18,8 +18,19 @@
           </h3>
         </div>
         <div slot="media">
-          <iframe src="https://www.youtube.com/embed/X6d3AIkvID4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          <!-- <img src="https://lusaxweb.github.io/vuesax/patreon/02-Vuesax-Silver-Manuel-Rovira-Luis-Daniel-Rovira-Lusax-Web-Framework-ui-components-Vue-js-nuxt-vuep.png"> -->
+          <!-- <iframe
+            src="https://www.youtube.com/embed/X6d3AIkvID4"
+            frameborder="0"
+            allow="
+              accelerometer;
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              gyroscope;
+              picture-in-picture
+            "
+            allowfullscreen
+          ></iframe> -->
         </div>
         <div>
           <span>
@@ -28,27 +39,56 @@
         </div>
         <div slot="footer">
           <vs-row vs-justify="flex-end">
-            <vs-button class="mr-1" color="primary" type="gradient">
+            <vs-button
+              class="mr-1"
+              color="primary"
+              type="gradient"
+              @click="viewGame(game.id)"
+            >
               View
             </vs-button>
-            <vs-button class="mr-1" color="warning" type="gradient">
+            <vs-button
+              class="mr-1"
+              color="warning"
+              type="gradient"
+            >
               Edit
             </vs-button>
-            <vs-button class="mr-1" color="danger" type="gradient">
+            <vs-button
+              class="mr-1"
+              color="danger"
+              type="gradient"
+            >
               Delete
             </vs-button>
           </vs-row>
         </div>
       </vs-card>
     </vs-col>
+
+    <ViewGame
+      v-if="game.view"
+      :gameId="game.selectedGameId"
+      @closed="game.view = false"
+    />
   </vs-row>
 </template>
 
 <script>
+import ViewGame from './ViewGame.vue';
+
 export default {
+  name: 'GameCards',
+  components: {
+    ViewGame,
+  },
   data() {
     return {
       games: [],
+      game: {
+        selectedGameId: 1,
+        view: false,
+      },
     };
   },
   computed: {
@@ -73,6 +113,10 @@ export default {
         this.openAlert('danger', 'Oopss!', 'Something was wrong');
       }
     },
+    viewGame(gameId) {
+      this.game.view = true;
+      this.game.selectedGameId = gameId;
+    },
     openAlert(color, title, text) {
       this.colorAlert = color || 'success';
       this.$vs.dialog({
@@ -82,11 +126,11 @@ export default {
         accept: this.acceptAlert,
       });
     },
-    acceptAlert() {
+    notify(color, title, text) {
       this.$vs.notify({
-        color: this.colorAlert,
-        title: 'Accept Selected',
-        text: 'Lorem ipsum dolor sit amet, consectetur',
+        color,
+        title,
+        text,
       });
     },
   },
