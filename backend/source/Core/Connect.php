@@ -25,7 +25,7 @@ class Connect
                 self::OPTIONS
             );
         } catch (\PDOException $exception) {
-            die("<h1>Something was wrong</h2>");
+            die("<h1>Something was wrong to connect to database</h1>");
         }
 
         return self::$instance;

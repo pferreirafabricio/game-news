@@ -5,24 +5,6 @@ require_once './source/Core/Headers.php';
 
 use CoffeeCode\Router\Router;
 
-#region My first try of make a router
-
-/**
- * ROUTE CONFIG
- */
-// $route = new Route();
-
-/**
- * ROUTES
- */
-// $route->get('/game', 'GameController@index');
-// $route->get('/game/:id', 'GameController@getById');
-// $route->post('/game', 'GameController@create');
-// $route->put('/game/:id', 'GameController@update');
-// $route->delete('/game/:id', 'GameController@delete');
-
-#endregion
-
 /**
  * ROUTE CONFIG
  */
@@ -39,3 +21,21 @@ $router->put('/{id}', 'GameController@update');
 $router->delete('/{id}', 'GameController@delete');
 
 $router->dispatch();
+
+#region My first try to make a router
+
+/**
+ * ROUTE CONFIG
+ */
+// $route = new Route();
+
+/**
+ * ROUTES
+ */
+// $route->get('/game', 'GameController@index');
+// $route->get('/game/:id', 'GameController@getById');
+// $route->post('/game', 'GameController@create');
+// $route->put('/game/:id', 'GameController@update');
+// $route->delete('/game/:id', 'GameController@delete');
+
+#endregion

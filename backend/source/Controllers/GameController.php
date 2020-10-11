@@ -30,7 +30,7 @@ class GameController implements iController
     public function index(array $data)
     {         
         $games = $this->game->getAll();
-        if (is_null($games)) {
+        if ($this->game->fail()) {
             return response([
                 'message' => $this->game->fail(),
             ], 500)->json();
@@ -99,7 +99,7 @@ class GameController implements iController
         }
 
         $insertedId =  $this->game->create($requestData);
-        if(is_null($insertedId)) {
+        if($this->game->fail()) {
             return response([
                 'message' => $this->game->fail()
             ])->json();
