@@ -17,17 +17,17 @@
       <span class="font-weight-bold">Video</span>
       <div class="text-center">
         <iframe
-            src="https://www.youtube.com/embed/X6d3AIkvID4"
-            frameborder="0"
-            allow="
-              accelerometer;
-              autoplay;
-              clipboard-write;
-              encrypted-media;
-              gyroscope;
-              picture-in-picture
-            "
-            allowfullscreen
+          :src="`https://www.youtube.com/embed/${game.video_id}`"
+          frameborder="0"
+          allow="
+            accelerometer;
+            autoplay;
+            clipboard-write;
+            encrypted-media;
+            gyroscope;
+            picture-in-picture
+          "
+          allowfullscreen
           ></iframe>
       </div>
     </section>
@@ -73,26 +73,25 @@ export default {
     this.viewGame(this.gameId);
   },
   methods: {
-    async viewGame(gameId) {
-      try {
-        await fetch(`${this.webApiUrl}/game/${gameId}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+    viewGame(gameId) {
+      fetch(`${this.webApiUrl}/game/${gameId}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.game = data.data;
         })
-          .then((response) => response.json())
-          .then((data) => {
-            this.game = data.data;
+        .catch(() => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Oopss!',
+            text: 'Something was wrong to view this game',
           });
-      } catch (exception) {
-        this.$vs.notify({
-          color: 'danger',
-          title: 'Oopss!',
-          text: 'Something was wrong to view this game',
         });
-      }
     },
   },
 };

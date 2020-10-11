@@ -28,6 +28,7 @@
         label="Description "
         :counter-danger.sync="description.counterDanger"
         v-model="Fields.description"
+        height="150px"
       />
     </section>
     <section>
@@ -107,28 +108,27 @@ export default {
     }
   },
   methods: {
-    async loadGame(gameId) {
-      try {
-        await fetch(`${this.webApiUrl}/game/${gameId}`, {
-          method: 'GET',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
+    loadGame(gameId) {
+      fetch(`${this.webApiUrl}/game/${gameId}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.Fields.title = data.data.title;
+          this.Fields.description = data.data.description;
+          this.Fields.video_id = data.data.video_id;
         })
-          .then((response) => response.json())
-          .then((data) => {
-            this.Fields.title = data.data.title;
-            this.Fields.description = data.data.description;
-            this.Fields.video_id = data.data.video_id;
+        .catch(() => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Oopss!',
+            text: 'Something was wrong to view this game',
           });
-      } catch (exception) {
-        this.$vs.notify({
-          color: 'danger',
-          title: 'Oopss!',
-          text: 'Something was wrong to view this game',
         });
-      }
     },
     create() {
       if (this.validateFields()) {
@@ -204,6 +204,7 @@ export default {
               text: data.data.message,
             });
 
+            this.$emit('update-game');
             this.loadGame(this.gameId);
           });
       } else {
@@ -215,11 +216,11 @@ export default {
       }
     },
     validateFields() {
-      // if (this.Fields.title.length < 4 || this.Fields.title.length > 100) {
-      //   this.errorMessages.title.error = true;
-      //   this.errorMessages.title.text = 'The title of the game is invalid';
-      //   return false;
-      // }
+      if (this.Fields.title.length < 4 || this.Fields.title.length > 100) {
+        this.errorMessages.title.error = true;
+        this.errorMessages.title.text = 'The title of the game is invalid';
+        return false;
+      }
 
       this.successMessages.title.success = true;
 

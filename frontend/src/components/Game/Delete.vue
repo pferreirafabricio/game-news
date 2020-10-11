@@ -12,9 +12,6 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/named
-// import { EventBus } from '../../eventBus';
-
 export default {
   props: {
     gameId: {
@@ -33,32 +30,32 @@ export default {
     },
   },
   methods: {
-    async deleteGame() {
-      try {
-        await fetch(`${this.webApiUrl}/game/${this.gameId}`, {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-          },
-        })
-          .then(() => {
-            this.$vs.notify({
-              color: 'success',
-              title: 'Success!',
-              text: 'Game deleted successfuly!',
-            });
-
-            this.$emit('closed');
-            this.$emit('delete-game');
+    deleteGame() {
+      fetch(`${this.webApiUrl}/game/${this.gameId}`, {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          this.$vs.notify({
+            color: 'success',
+            title: 'Success!',
+            text: data.data.message,
           });
-      } catch (exception) {
-        this.$vs.notify({
-          color: 'danger',
-          title: 'Oopss!',
-          text: 'Something was wrong to delete this game',
+
+          this.$emit('closed');
+          this.$emit('delete-game');
+        })
+        .catch(() => {
+          this.$vs.notify({
+            color: 'danger',
+            title: 'Oopss!',
+            text: 'Something was wrong to delete this game',
+          });
         });
-      }
     },
   },
 };
