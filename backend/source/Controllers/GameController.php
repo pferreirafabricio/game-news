@@ -36,7 +36,7 @@ class GameController implements iController
             ], 500)->json();
         }
 
-        echo response($games)->json();
+        return response($games)->json();
     }
 
     /**
@@ -49,19 +49,19 @@ class GameController implements iController
         $id = (int) $data['id'];
         
         if (!$this->validateGameId($id)) {
-            echo response([
+            return response([
                 'message' => 'Oopss! The Id of the game is missing'
             ], 400)->json();
         }
 
         $game = $this->game->findById($id);
         if (is_null($game) || is_null($game->data())) {
-            echo response([
+            return response([
                 'message' => "No game found with id {$id}"
             ], 404)->json();
         }
 
-        echo response($game->data())->json();
+        return response($game->data())->json();
     }
 
     /**
@@ -121,7 +121,7 @@ class GameController implements iController
         $requestData = Request::decode(file_get_contents('php://input'));
 
         if (empty($requestData)) {
-            echo response([
+            return response([
                 'message' => 'Oopss! The data to update is missing'
             ], 400)->json();
         }
@@ -129,7 +129,7 @@ class GameController implements iController
         $id = (int) $data['id'] ?? 0;
 
         if (!$this->validateGameId($id)) {
-            echo response([
+            return response([
                 'message' => 'Oopss! The Id of the game is missing'
             ], 400)->json();
         }
@@ -141,7 +141,7 @@ class GameController implements iController
         );
 
         if (!$this->game->required($requestData)) {
-            echo response([
+            return response([
                 'message' => 'Verify the data and try again',
                 'errcode' => 400
             ], 400)->json();
@@ -149,19 +149,19 @@ class GameController implements iController
 
         $errors = $this->validate(true, $id);
         if ($errors) {
-            echo response([
+            return response([
                 'message' => $errors,
                 'errcode' => 400
             ], 400)->json();
         }
 
         if (!$this->game->updateById($requestData, $id)) {
-            echo response([
+            return response([
                 'message' => 'Oopss! Something was wrong on update the game',
             ], 500)->json();
         }
 
-        echo response([
+        return response([
             'message' => 'Success! Game updated',
         ])->json();
     }
@@ -176,18 +176,18 @@ class GameController implements iController
         $id = (int) $data['id'] ?? 0;
 
         if (!$this->validateGameId($id)) {
-            echo response([
+            return response([
                 'message' => 'Oopss! The Id of the game is missing'
             ], 400)->json();
         }
 
         if (!$this->game->remove($id)) {
-            echo response([
+            return response([
                 'message' => 'Oopss! Something was wrong on update the game',
             ], 500)->json();
         }
 
-        echo response([
+        return response([
             'message' => 'Success! Game deleted',
         ], 200)->json();
     }
