@@ -4,6 +4,7 @@ namespace Source\Controllers;
 
 use Source\Interfaces\iController;
 use Source\Models\Game;
+use Source\Support\Request;
 
 class GameController implements iController
 {
@@ -20,7 +21,6 @@ class GameController implements iController
         $this->game = new Game();
     }
 
-    
     /**
      * index
      *
@@ -69,22 +69,22 @@ class GameController implements iController
      */
     public function create()
     {
-        parse_str(file_get_contents('php://input'), $requestData);
+        $requestData = Request::decode(file_get_contents('php://input'));
 
-        if (!$this->validateData($requestData)) {
-            echo response([
+        if (empty($requestData)) {
+            return response([
                 'message' => 'Oopss! The data to create is missing'
             ], 400)->json();
         }
 
         $this->game->bootstrap(
-            $requestData['title'],
-            $requestData['description'],
-            $requestData['video_id'],
+            $requestData['title'] ?? '',
+            $requestData['description'] ?? '',
+            $requestData['video_id'] ?? '',
         );
 
         if (!$this->game->required($requestData)) {
-            echo response([
+            return response([
                 'message' => 'Verify the data and try again',
                 'errcode' => 400
             ], 400)->json();
@@ -92,7 +92,7 @@ class GameController implements iController
 
         $errors = $this->validate();
         if ($errors) {
-            echo response([
+            return response([
                 'message' => $errors,
                 'errcode' => 400
             ], 400)->json();
@@ -100,12 +100,12 @@ class GameController implements iController
 
         $insertedId =  $this->game->create($requestData);
         if(is_null($insertedId)) {
-            echo response([
+            return response([
                 'message' => $this->game->fail()
             ])->json();
         };
 
-        echo response([
+        return response([
             'gameId' => $insertedId,
             'message' => 'Success! Game created successfully'
         ])->json();
@@ -118,9 +118,9 @@ class GameController implements iController
      */
     public function update(array $data)
     {
-        parse_str(file_get_contents('php://input'), $requestData);
+        $requestData = Request::decode(file_get_contents('php://input'));
 
-        if (!$this->validateData($requestData)) {
+        if (empty($requestData)) {
             echo response([
                 'message' => 'Oopss! The data to update is missing'
             ], 400)->json();
@@ -135,9 +135,9 @@ class GameController implements iController
         }
 
         $this->game->bootstrap(
-            $requestData['title'],
-            $requestData['description'],
-            $requestData['video_id'],
+            $requestData['title'] ?? '',
+            $requestData['description'] ?? '',
+            $requestData['video_id'] ?? '',
         );
 
         if (!$this->game->required($requestData)) {
@@ -190,21 +190,6 @@ class GameController implements iController
         echo response([
             'message' => 'Success! Game deleted',
         ], 200)->json();
-    }
-    
-    /**
-     * validateData
-     *
-     * @param  array $data
-     * @return bool
-     */
-    private function validateData(array $data): bool 
-    {
-        if (empty($data)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
