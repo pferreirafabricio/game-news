@@ -1,6 +1,6 @@
 <template>
   <vs-prompt
-    title="Create a new game"
+    title="View game"
     color="success"
     accept-text="Create"
     @accept="saveGame()"
@@ -8,29 +8,41 @@
     :active.sync="activateDialog"
     buttons-hidden
   >
-    <div class="mb-3">
-      Name
-      <vs-input
-        disabled
-        placeholder="Game's title"
-        v-model="game.title"
-      />
-    </div>
-    <div class="mb-3">
-      <vs-textarea
-        label="Description "
-        v-model="game.description"
-        disabled
-      />
-    </div>
-    <div>
-      Video Id
-      <vs-input
-        placeholder="Game's Video Id from YouTube"
-        v-model="game.video_id"
-        disabled
-      />
-    </div>
+    <section class="mb-3">
+      <h2 class="">
+        {{ game.title }}
+      </h2>
+    </section>
+    <section class="mb-3">
+      <span class="font-weight-bold">Video</span>
+      <div class="text-center">
+        <iframe
+            src="https://www.youtube.com/embed/X6d3AIkvID4"
+            frameborder="0"
+            allow="
+              accelerometer;
+              autoplay;
+              clipboard-write;
+              encrypted-media;
+              gyroscope;
+              picture-in-picture
+            "
+            allowfullscreen
+          ></iframe>
+      </div>
+    </section>
+    <section class="mb-3">
+      <span class="font-weight-bold">Description</span>
+      <div>
+        {{ game.description }}
+      </div>
+    </section>
+    <section>
+      <span class="font-weight-bold">Video Id</span>
+      <div>
+        {{ game.video_id }}
+      </div>
+    </section>
   </vs-prompt>
 </template>
 

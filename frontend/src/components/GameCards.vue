@@ -8,7 +8,7 @@
       vs-w="3"
       vs-lg="3"
       vs-sm="12"
-      v-for="(game, index) in games.data"
+      v-for="(game, index) in games"
       :key="index"
     >
       <vs-card>
@@ -110,15 +110,17 @@ export default {
   methods: {
     async loadGames() {
       try {
-        const response = await fetch(`${this.webApiUrl}/game`, {
+        await fetch(`${this.webApiUrl}/game`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-        });
-
-        this.games = await response.json();
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            this.games = data.data;
+          });
       } catch (exception) {
         this.notify(
           'danger',
