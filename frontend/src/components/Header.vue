@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import CreateGame from './Game/Create.vue';
+import CreateGame from './Game/Edit.vue';
 
 export default {
   name: 'Header',

@@ -42,26 +42,27 @@
             <vs-button
               class="mr-1"
               color="primary"
+              icon="visibility"
               type="gradient"
+              :title="`View ${game.title}`"
               @click="viewGame(game.id)"
-            >
-              View
-            </vs-button>
+            ></vs-button>
             <vs-button
               class="mr-1"
               color="warning"
+              icon="create"
               type="gradient"
-            >
-              Edit
-            </vs-button>
+              :title="`Edit ${game.title}`"
+              @click="editGame(game.id)"
+            ></vs-button>
             <vs-button
               class="mr-1"
               color="danger"
+              icon="delete"
               type="gradient"
+              :title="`Delete ${game.title}`"
               @click="deleteGame(game.id)"
-            >
-              Delete
-            </vs-button>
+            ></vs-button>
           </vs-row>
         </div>
       </vs-card>
@@ -71,6 +72,13 @@
       v-if="game.view"
       :gameId="game.selectedGameId"
       @closed="game.view = false"
+    />
+
+    <EditGame
+      v-if="game.edit"
+      :gameId="game.selectedGameId"
+      :showDialog="game.edit"
+      @closed="game.edit = false"
     />
 
     <DeleteGame
@@ -84,11 +92,13 @@
 <script>
 import ViewGame from './View.vue';
 import DeleteGame from './Delete.vue';
+import EditGame from './Edit.vue';
 
 export default {
   name: 'GameCards',
   components: {
     ViewGame,
+    EditGame,
     DeleteGame,
   },
   data() {
@@ -97,6 +107,7 @@ export default {
       game: {
         selectedGameId: 0,
         view: false,
+        edit: false,
         delete: false,
       },
     };
@@ -133,6 +144,10 @@ export default {
       this.game.view = true;
       this.game.selectedGameId = gameId;
     },
+    editGame(gameId) {
+      this.game.edit = true;
+      this.game.selectedGameId = gameId;
+    },
     deleteGame(gameId) {
       this.game.delete = true;
       this.game.selectedGameId = gameId;
@@ -147,17 +162,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.mr-1 {
-  margin-right: .2rem;
-}
-
-.m-2 {
-  padding: .8rem;
-}
-
-.p-5 {
-  padding: 1.4rem;
-}
-</style>
