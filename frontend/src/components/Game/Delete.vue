@@ -7,10 +7,14 @@
     :active.sync="activateDialog"
     accept-text="Delete"
     text="Delete this game?"
+    ref="deleteDialog"
   ></vs-prompt>
 </template>
 
 <script>
+// eslint-disable-next-line import/named
+// import { EventBus } from '../../eventBus';
+
 export default {
   props: {
     gameId: {
@@ -44,6 +48,9 @@ export default {
               title: 'Success!',
               text: 'Game deleted successfuly!',
             });
+
+            this.$emit('closed');
+            this.$emit('delete-game');
           });
       } catch (exception) {
         this.$vs.notify({

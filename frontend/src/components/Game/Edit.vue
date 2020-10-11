@@ -47,6 +47,9 @@
 </template>
 
 <script>
+// eslint-disable-next-line import/named
+import { EventBus } from '../../eventBus';
+
 export default {
   name: 'CreateGame',
   props: {
@@ -144,7 +147,11 @@ export default {
               title: 'Success!',
               text: data.data.message,
             });
+
             this.clean();
+            this.cleanMessages();
+            this.$emit('closed');
+            EventBus.$emit('new-game');
           })
           .catch((error) => {
             this.$vs.notify({
@@ -178,6 +185,7 @@ export default {
               title: 'Success!',
               text: data.data.message,
             });
+
             this.loadGame(this.gameId);
           })
           .catch((error) => {
@@ -227,6 +235,15 @@ export default {
     clean() {
       Object.entries(this.Fields).forEach(([key]) => {
         this.Fields[key] = '';
+      });
+    },
+    cleanMessages() {
+      Object.entries(this.errorMessages).forEach(([key]) => {
+        this.errorMessages[key].error = false;
+      });
+
+      Object.entries(this.successMessages).forEach(([key]) => {
+        this.successMessages[key].success = false;
       });
     },
   },

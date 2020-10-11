@@ -85,6 +85,7 @@
       v-if="game.delete"
       :gameId="game.selectedGameId"
       @closed="game.delete = false"
+      @delete-game="loadGames()"
     />
   </vs-row>
 </template>
@@ -93,6 +94,7 @@
 import ViewGame from './View.vue';
 import DeleteGame from './Delete.vue';
 import EditGame from './Edit.vue';
+import { EventBus } from '../../eventBus';
 
 export default {
   name: 'GameCards',
@@ -117,6 +119,9 @@ export default {
   },
   mounted() {
     this.loadGames();
+    EventBus.$on('new-game', () => {
+      this.loadGames();
+    });
   },
   methods: {
     async loadGames() {
