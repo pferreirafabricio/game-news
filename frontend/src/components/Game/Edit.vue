@@ -142,6 +142,15 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
+            if (data.data.errcode) {
+              this.$vs.notify({
+                color: 'danger',
+                title: 'Oopss!',
+                text: data.data.message,
+              });
+              return;
+            }
+
             this.$vs.notify({
               color: 'success',
               title: 'Success!',
@@ -180,6 +189,15 @@ export default {
         })
           .then((response) => response.json())
           .then((data) => {
+            if (data.data.errcode) {
+              this.$vs.notify({
+                color: 'danger',
+                title: 'Oopss!',
+                text: data.data.message,
+              });
+              return;
+            }
+
             this.$vs.notify({
               color: 'success',
               title: 'Success!',
@@ -187,13 +205,6 @@ export default {
             });
 
             this.loadGame(this.gameId);
-          })
-          .catch((error) => {
-            this.$vs.notify({
-              color: 'danger',
-              title: 'Oops!',
-              text: error.response.data.message,
-            });
           });
       } else {
         this.$vs.notify({
@@ -204,11 +215,11 @@ export default {
       }
     },
     validateFields() {
-      if (this.Fields.title.length < 4 || this.Fields.title.length > 100) {
-        this.errorMessages.title.error = true;
-        this.errorMessages.title.text = 'The title of the game is invalid';
-        return false;
-      }
+      // if (this.Fields.title.length < 4 || this.Fields.title.length > 100) {
+      //   this.errorMessages.title.error = true;
+      //   this.errorMessages.title.text = 'The title of the game is invalid';
+      //   return false;
+      // }
 
       this.successMessages.title.success = true;
 
