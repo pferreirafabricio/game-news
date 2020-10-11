@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuesax from 'vuesax';
 import App from './App.vue';
 
+import 'bootstrap/dist/css/bootstrap-grid.min.css';
+
 import 'vuesax/dist/vuesax.css';
 import 'material-icons/iconfont/material-icons.css';
 

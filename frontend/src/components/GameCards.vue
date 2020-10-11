@@ -1,12 +1,12 @@
 <template>
-  <vs-row class="p-5" vs-justify="space-around">
+  <vs-row vs-justify="space-around">
     <vs-col
       type="flex"
-      class="m-2"
+      class="p-3"
       vs-justify="center"
       vs-align="center"
-      vs-w="4"
-      vs-lg="4"
+      vs-w="3"
+      vs-lg="3"
       vs-sm="12"
       v-for="(game, index) in games.data"
       :key="index"
@@ -18,7 +18,8 @@
           </h3>
         </div>
         <div slot="media">
-          <img src="https://lusaxweb.github.io/vuesax/patreon/02-Vuesax-Silver-Manuel-Rovira-Luis-Daniel-Rovira-Lusax-Web-Framework-ui-components-Vue-js-nuxt-vuep.png">
+          <iframe src="https://www.youtube.com/embed/X6d3AIkvID4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          <!-- <img src="https://lusaxweb.github.io/vuesax/patreon/02-Vuesax-Silver-Manuel-Rovira-Luis-Daniel-Rovira-Lusax-Web-Framework-ui-components-Vue-js-nuxt-vuep.png"> -->
         </div>
         <div>
           <span>
@@ -59,7 +60,7 @@ export default {
   methods: {
     async loadGames() {
       try {
-        const response = await fetch(`${this.webApiUrl}/game/`, {
+        const response = await fetch(`${this.webApiUrl}/game`, {
           method: 'GET',
           headers: {
             Accept: 'application/json',
