@@ -82,8 +82,8 @@
 </template>
 
 <script>
-import ViewGame from './ViewGame.vue';
-import DeleteGame from './DeleteGame.vue';
+import ViewGame from './View.vue';
+import DeleteGame from './Delete.vue';
 
 export default {
   name: 'GameCards',

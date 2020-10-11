@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import GameCards from './components/GameCards.vue';
+import GameCards from './components/Game/Cards.vue';
 import Header from './components/Header.vue';
 
 export default {
