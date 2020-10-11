@@ -58,6 +58,7 @@
               class="mr-1"
               color="danger"
               type="gradient"
+              @click="deleteGame(game.id)"
             >
               Delete
             </vs-button>
@@ -71,23 +72,32 @@
       :gameId="game.selectedGameId"
       @closed="game.view = false"
     />
+
+    <DeleteGame
+      v-if="game.delete"
+      :gameId="game.selectedGameId"
+      @closed="game.delete = false"
+    />
   </vs-row>
 </template>
 
 <script>
 import ViewGame from './ViewGame.vue';
+import DeleteGame from './DeleteGame.vue';
 
 export default {
   name: 'GameCards',
   components: {
     ViewGame,
+    DeleteGame,
   },
   data() {
     return {
       games: [],
       game: {
-        selectedGameId: 1,
+        selectedGameId: 0,
         view: false,
+        delete: false,
       },
     };
   },
@@ -110,21 +120,20 @@ export default {
 
         this.games = await response.json();
       } catch (exception) {
-        this.openAlert('danger', 'Oopss!', 'Something was wrong');
+        this.notify(
+          'danger',
+          'Oopss!',
+          'Something was wrong on loading the games',
+        );
       }
     },
     viewGame(gameId) {
       this.game.view = true;
       this.game.selectedGameId = gameId;
     },
-    openAlert(color, title, text) {
-      this.colorAlert = color || 'success';
-      this.$vs.dialog({
-        color: this.colorAlert,
-        title,
-        text,
-        accept: this.acceptAlert,
-      });
+    deleteGame(gameId) {
+      this.game.delete = true;
+      this.game.selectedGameId = gameId;
     },
     notify(color, title, text) {
       this.$vs.notify({
