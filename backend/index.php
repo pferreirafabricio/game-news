@@ -1,7 +1,7 @@
 <?php
 
 require_once './vendor/autoload.php';
-// require_once './source/Core/Headers.php';
+require_once './source/Core/Headers.php';
 
 use CoffeeCode\Router\Router;
 
@@ -39,7 +39,3 @@ $router->put('/{id}', 'GameController@update');
 $router->delete('/{id}', 'GameController@delete');
 
 $router->dispatch();
-
-if ($router->error()) {
-    $router->redirect('/');
-}
