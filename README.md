@@ -1,6 +1,6 @@
 <h5 align="center">
   <img src="./docs/games-icon.png" width="150px" /> <br/>
-  <b>Gamenews - The bests news about games!</b> :yo_yo:
+  <b>Gamenews</b> :yo_yo:
 </h5>
 <p align="center">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green">
