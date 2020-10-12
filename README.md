@@ -35,6 +35,7 @@ $router->delete('/{id}', 'GameController@delete');
  2. Enter in the API's folder: ```cd backend```
  3. Generate the autoload files: ```composer update```
  6. Finally run the apache server and access ```http://localhost/gamenews/backend/game``` 😃
+ > OBS: If your url is different, change the CONF_BASE_URL constant in ```source/Boot/Config.php```
  
 ## 	:running_woman: Front End - Installing and Running
  1. Clone this repository ```https://github.com/pferreirafabricio/gamenews.git```;
