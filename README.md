@@ -8,9 +8,9 @@
 
 ## :eyes: Overview 
 <div>
- <img src="./docs/screenshots/all-games.png" width="auto" height="500px"/>
- <img src="./docs/screenshots/create-game.png" width="auto" height="500px"/>
- <img src="./docs/screenshots/update-game.png" width="auto" height="500px"/>
+ <img src="./docs/screenshots/all-games.png" width="auto" height="400px"/>
+ <img src="./docs/screenshots/create-game.png" width="auto" height="400px"/>
+ <img src="./docs/screenshots/update-game.png" width="auto" height="400px"/>
 </div>
 
 ## :open_book: About 
