@@ -11,7 +11,7 @@ define('CONF_BASE_URL', 'http://localhost:8080/gamenews/backend/');
 define('CONF_DB_HOST', 'localhost');
 define('CONF_DB_NAME', 'gamenews');
 define('CONF_DB_USER', 'root');
-define('CONF_DB_PASSWORD', 'cadeira12');
+define('CONF_DB_PASSWORD', '');
 
 
 /**
