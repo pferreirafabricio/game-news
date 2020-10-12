@@ -22,12 +22,12 @@ class GameController implements iController
     }
 
     /**
-     * index
+     * Get all games
      *
-     * @param  mixed $data
+     * @param  array $data
      * @return void
      */
-    public function index(array $data)
+    public function index(array $data): string
     {         
         $games = $this->game->getAll();
         if ($this->game->fail()) {
@@ -40,11 +40,12 @@ class GameController implements iController
     }
 
     /**
-     * getById
+     * Get a game by id
      *
      * @param  array $data
+     * @return string
      */
-    public function getById(array $data)
+    public function getById(array $data): string
     {
         $id = (int) $data['id'];
         
@@ -65,9 +66,11 @@ class GameController implements iController
     }
 
     /**
-     * create
+     * Create a game
+     * 
+     * @return string
      */
-    public function create()
+    public function create(): string
     {
         $requestData = Request::decode(file_get_contents('php://input'));
 
@@ -112,11 +115,12 @@ class GameController implements iController
     }
     
     /**
-     * update
+     * Update a game by id
      *
      * @param  array $data
+     * @return string
      */
-    public function update(array $data)
+    public function update(array $data): string
     {
         $requestData = Request::decode(file_get_contents('php://input'));
 
@@ -167,11 +171,12 @@ class GameController implements iController
     }
     
     /**
-     * delete
+     * Delete a game by id
      *
      * @param  array $data
+     * @return string
      */
-    public function delete(array $data)
+    public function delete(array $data): string
     {
         $id = (int) $data['id'] ?? 0;
 
@@ -193,7 +198,7 @@ class GameController implements iController
     }
 
     /**
-     * validateGameId
+     * Verify if a game id is valid
      *
      * @param  int $id
      * @return bool
@@ -208,9 +213,10 @@ class GameController implements iController
     }
     
     /**
-     * validate
+     * Valida the basic data of the game
      *
      * @param  bool $validateId
+     * @param  int $id
      * @return array
      */
     private function validate(bool $validateId = false, int $id = 0): array

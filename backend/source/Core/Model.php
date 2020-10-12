@@ -84,7 +84,7 @@ class Model
     }
 
     /**
-     * Method for create a record
+     * Create a record
      *
      * @param  string $entity 
      * @param  array $data
@@ -187,7 +187,14 @@ class Model
             return null;
         }
     }
-
+    
+    /**
+     * delete
+     *
+     * @param  string $terms
+     * @param  string $params
+     * @return int
+     */
     public function delete(string $terms, string $params): ?int
     {
         try {
@@ -218,7 +225,7 @@ class Model
     }
     
     /**
-     * filter
+     * Filter the variables
      *
      * @param  array $data
      * @return array

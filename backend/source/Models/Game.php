@@ -17,7 +17,7 @@ class Game extends Model
     }
     
     /**
-     * bootstrap
+     * Bootstrap the Game model instance
      *
      * @param  string $title
      * @param  string $description
@@ -90,7 +90,7 @@ class Game extends Model
     }
     
     /**
-     * updateById
+     * Update a record by id
      *
      * @param  array $data
      * @param  int $id
@@ -102,7 +102,7 @@ class Game extends Model
     }
     
     /**
-     * remove
+     * Remove a record by id
      *
      * @param  int $id
      * @return int

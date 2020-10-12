@@ -17,14 +17,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Source\\": "source/"
+            "Source\\": "source/",
+            "CoffeeCode\\Router\\": "source/Support/router/src"
         },
         "files": [
             "Source/Boot/Config.php",
             "Source/Boot/Helpers.php"
         ]
     },
-    "require": {
-        "coffeecode/router": "1.0.*"
-    }
+    "require": {}
 }

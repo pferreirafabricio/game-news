@@ -51,7 +51,7 @@ class Route
     }
 
     /**
-     * getParams
+     * Get the params of the url
      *
      * @return array|null
      */
@@ -83,7 +83,7 @@ class Route
     }
 
     /**
-     * get
+     * Get HTTP Method
      *
      * @param  string $routeName
      * @param  string|\Closure $handler
@@ -98,7 +98,7 @@ class Route
     }
 
     /**
-     * post
+     * Post HTTP Method
      *
      * @param  string $routeName
      * @param  string|\Closure $handler
@@ -113,7 +113,7 @@ class Route
     }
 
     /**
-     * put
+     * Put HTTP Method
      *
      * @param  string $routeName
      * @param  string|\Closure $handler
@@ -128,7 +128,7 @@ class Route
     }
 
     /**
-     * delete
+     * Delete HTTP Method
      *
      * @param  string $routeName
      * @param  string|\Closure $handler
@@ -143,7 +143,7 @@ class Route
     }
 
     /**
-     * addRoute
+     * Add a route to the array
      *
      * @param  string $routeName
      * @param  string|\Closure $handler
@@ -197,7 +197,7 @@ class Route
     }
 
     /**
-     * namespace
+     * Gets the controllers's namespace
      *
      * @return string
      */
@@ -207,7 +207,7 @@ class Route
     }
 
     /**
-     * validateHttpMethod
+     * Validate if the current http method is the same of the request
      *
      * @return void
      */

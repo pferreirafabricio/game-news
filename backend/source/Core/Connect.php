@@ -14,7 +14,12 @@ class Connect
         \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
         \PDO::ATTR_CASE => \PDO::CASE_NATURAL
     ];
-
+    
+    /**
+     * Get the current stance of the database
+     *
+     * @return PDO
+     */
     public static function getInstance(): ?\PDO
     {
         try {

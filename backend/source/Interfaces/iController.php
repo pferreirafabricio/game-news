@@ -4,8 +4,8 @@ namespace Source\Interfaces;
 
 interface iController
 {
-    public function index(array $data);
-    public function create();
-    public function update(array $data);
-    public function delete(array $data);
+    public function index(array $data): string;
+    public function create(): string;
+    public function update(array $data): string;
+    public function delete(array $data): string;
 }

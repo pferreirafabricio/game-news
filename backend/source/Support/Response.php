@@ -2,9 +2,9 @@
 
 namespace Source\Support;
 
-use Source\Interfaces\iResponsable;
+use Source\Interfaces\iAnswerable;
 
-class Response implements iResponsable
+class Response implements iAnswerable
 {
     /** @var array */
     private $data; 
